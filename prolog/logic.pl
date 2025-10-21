@@ -1,9 +1,22 @@
-:- dynamic road/4.
+find_shortest(From, To, Distance, Time, Path) :-
+    findall(D-T-P, find_route(From, To, D, T, P), Routes),
+    Routes \== [],
+    min_distance(Routes, Distance, Time, Path).
 
-find_shortest(From, To, Distance, Time) :-
-    road(From, To, Distance, Time), !.
-find_shortest(From, To, Distance, Time) :-
-    road(From, X, D1, T1),
-    road(X, To, D2, T2),
-    Distance is D1 + D2,
-    Time is T1 + T2.
+find_route(From, To, Distance, Time, Path) :-
+    find_route(From, To, 0, 0, [From], Distance, Time, Path).
+
+find_route(To, To, DistAcc, TimeAcc, Visited, DistAcc, TimeAcc, Path) :-
+    reverse(Visited, Path).
+
+find_route(Current, To, DistAcc, TimeAcc, Visited, Distance, Time, Path) :-
+    (road(Current, Next, Dist, T); road(Next, Current, Dist, T)),
+    \+ member(Next, Visited),
+    NewDistAcc is DistAcc + Dist,
+    NewTimeAcc is TimeAcc + T,
+    find_route(Next, To, NewDistAcc, NewTimeAcc, [Next|Visited], Distance, Time, Path).
+
+min_distance([D-T-P], D, T, P) :- !.
+min_distance([D1-T1-P1, D2-T2-P2|Rest], BestD, BestT, BestP) :-
+    (D1 =< D2 -> min_distance([D1-T1-P1|Rest], BestD, BestT, BestP)
+               ; min_distance([D2-T2-P2|Rest], BestD, BestT, BestP)).
