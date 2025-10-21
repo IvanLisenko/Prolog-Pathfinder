@@ -5,5 +5,5 @@ document.getElementById('route-form').addEventListener('submit', async (e) => {
   const res = await fetch(`/find?from=${from}&to=${to}`);
   const data = await res.json();
   document.getElementById('result').innerText =
-    data.error ? data.error : `Distance: ${data.distance} km, Time: ${data.time} min`;
+    data.error ? data.error : `Distance: ${data.distance} km, Time: ${data.time} min, Route: ${data.route.join("->")}`;
 });
