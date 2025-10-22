@@ -15,7 +15,3 @@ road(primorskyi, kerch, 85, 68).
 road(krasnoperekopsk, armyansk, 20, 15).
 road(oktyabrskoye, krasnogvardeiskoe, 28, 19).
 road(krasnogvardeiskoe, dzhankoi, 27, 16).
-
-% Правило для симметричности дорог (дороги работают в обе стороны)
-%route(X, Y, Distance, Time) :- road(X, Y, Distance, Time).
-%route(X, Y, Distance, Time) :- road(Y, X, Distance, Time).

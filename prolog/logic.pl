@@ -10,11 +10,11 @@ find_route(To, To, DistAcc, TimeAcc, Visited, DistAcc, TimeAcc, Path) :-
     reverse(Visited, Path).
 
 find_route(Current, To, DistAcc, TimeAcc, Visited, Distance, Time, Path) :-
-    (road(Current, Next, Dist, T); road(Next, Current, Dist, T)),
+    (road(Current, Next, D, T); road(Next, Current, D, T)),
     \+ member(Next, Visited),
-    NewDistAcc is DistAcc + Dist,
-    NewTimeAcc is TimeAcc + T,
-    find_route(Next, To, NewDistAcc, NewTimeAcc, [Next|Visited], Distance, Time, Path).
+    NewDist is DistAcc + D,
+    NewTime is TimeAcc + T,
+    find_route(Next, To, NewDist, NewTime, [Next|Visited], Distance, Time, Path).
 
 min_distance([D-T-P], D, T, P) :- !.
 min_distance([D1-T1-P1, D2-T2-P2|Rest], BestD, BestT, BestP) :-

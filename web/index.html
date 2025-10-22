@@ -1,18 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Route Finder</title>
+  <title>Поиск маршрута</title>
   <link rel="stylesheet" href="/web/style.css">
 </head>
 <body>
-  <h1>Route Finder</h1>
+  <h1>Поиск маршрута</h1>
+
   <form id="route-form">
-    <input type="text" id="from" placeholder="From city">
-    <input type="text" id="to" placeholder="To city">
-    <button type="submit">Find</button>
+    <label>Откуда:</label>
+    <input type="text" id="from" autocomplete="off">
+
+    <label>Куда:</label>
+    <input type="text" id="to" autocomplete="off">
+
+    <div id="suggestions-from" class="suggestions"></div>
+    <div id="suggestions-to" class="suggestions"></div>
+
+    <button type="submit">Найти маршрут</button>
   </form>
-  <div id="result"></div>
+
+  <div id="result" style="margin-top:20px;"></div>
+
   <script src="/web/script.js"></script>
 </body>
 </html>
