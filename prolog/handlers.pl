@@ -6,22 +6,6 @@
 
 rus_to_id(Name, Id) :- atom_string(Id, Name).
 
-city_name(simferopol, 'Симферополь').
-city_name(alushta, 'Алушта').
-city_name(belogorsk, 'Белогорск').
-city_name(saki, 'Саки').
-city_name(oktyabrskoye, 'Октябрьское').
-city_name(krasnoperekopsk, 'Красноперекопск').
-city_name(sevastopol, 'Севастополь').
-city_name(yalta, 'Ялта').
-city_name(sudak, 'Судак').
-city_name(feodosiya, 'Феодосия').
-city_name(primorskyi, 'Приморский').
-city_name(kerch, 'Керчь').
-city_name(armyansk, 'Армянск').
-city_name(krasnogvardeiskoe, 'Красногвардейское').
-city_name(dzhankoi, 'Джанкой').
-
 path_names([], []).
 path_names([H|T], [HN|TN]) :-
     city_name(H, HN),

@@ -4,6 +4,7 @@
 :- use_module(library(http/http_json)).
 
 :- ensure_loaded(routes).
+:- ensure_loaded(localization).
 :- ensure_loaded(logic).
 :- ensure_loaded(handlers).
 
