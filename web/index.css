@@ -12,9 +12,17 @@ form input, form button {
   border: 1px solid #ccc;
 }
 
-button {
+form button {
   background-color: #0078d7;
   color: white;
   cursor: pointer;
+}
+
+form button:hover {
+  background-color: #58adf3;
+}
+
+form button:active {
+  background-color: #d7c500;
 }
 

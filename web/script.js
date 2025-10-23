@@ -1,26 +1,42 @@
 const cities = [
-  "Симферополь", "Алушта", "Белогорск", "Саки",
-  "Октябрьское", "Красноперекопск", "Севастополь",
-  "Ялта", "Судак", "Феодосия", "Приморский",
-  "Керчь", "Армянск", "Красногвардейское", "Джанкой"
+  "Симферополь", "Севастополь", "Керчь", "Евпатория",
+  "Феодосия", "Ялта", "Джанкой", "Бахчисарай", 
+  "Армянск", "Красноперекопск", "Алушта", "Судак",
+  "Щёлкино", "Белогорск", "Саки", "Старый Крым",
+  "Инкерман", "Гурзуф", "Алупка", "Массандра",
+  "Кореиз", "Форос", "Балаклава", "Коктебель",
+  "Орджоникидзе", "Прибрежное", "Раздольное", "Советский",
+  "Красногвардейское", "Первомайское", "Нижнегорский", "Мирный",
+  "Черноморское", "Красноармейское", "Войково", "Кировское",
+  "Красносельское", "Медведево", "Новоозёрное", "Октябрьское",
+  "Партенит", "Приморский", "Солнечногорское", "Урожайное",
+  "Холмовка", "Щебетовка"
 ];
 
 const cityMap = {
-  "Симферополь": "simferopol",
-  "Алушта": "alushta",
-  "Белогорск": "belogorsk",
-  "Саки": "saki",
-  "Октябрьское": "oktyabrskoye",
-  "Красноперекопск": "krasnoperekopsk",
-  "Севастополь": "sevastopol",
-  "Ялта": "yalta",
-  "Судак": "sudak",
-  "Феодосия": "feodosiya",
-  "Приморский": "primorskyi",
-  "Керчь": "kerch",
-  "Армянск": "armyansk",
-  "Красногвардейское": "krasnogvardeiskoe",
-  "Джанкой": "dzhankoi"
+  "Симферополь": "simferopol", "Севастополь": "sevastopol",
+  "Керчь": "kerch", "Евпатория": "yevpatoriya",
+  "Феодосия": "feodosiya", "Ялта": "yalta",
+  "Джанкой": "dzhankoi", "Бахчисарай": "bakhchisaray",
+  "Армянск": "armyansk", "Красноперекопск": "krasnoperekopsk",
+  "Алушта": "alushta", "Судак": "sudak",
+  "Щёлкино": "shcholkino", "Белогорск": "belogorsk",
+  "Саки": "saki", "Старый Крым": "staryi krym",
+  "Инкерман": "inkerman", "Гурзуф": "gurzuf",
+  "Алупка": "alupka", "Массандра": "massandra",
+  "Кореиз": "koreiz", "Форос": "foros",
+  "Балаклава": "balaklava", "Коктебель": "koktebel",
+  "Орджоникидзе": "ordzhonikidze", "Прибрежное": "pribrizhnoye",
+  "Раздольное": "razdolnoye", "Советский": "sovetskiy",
+  "Красногвардейское": "krasnogvardeyskoye", "Первомайское": "pervomayskoye",
+  "Нижнегорский": "nizhnegorskiy", "Мирный": "mirnyy",
+  "Черноморское": "chernomorskoye", "Красноармейское": "krasnoarmeyskoye",
+  "Войково": "voikovo", "Кировское": "kirovskoye",
+  "Красносельское": "krasnoselskoye", "Медведево": "medvedevo",
+  "Новоозёрное": "novozyornoye", "Октябрьское": "oktyabrskoye",
+  "Партенит": "partenity", "Приморский": "primorskiy",
+  "Солнечногорское": "solnechnogorskoye", "Урожайное": "urozhaynoye",
+  "Холмовка": "kholmovka", "Щебетовка": "shchebetovka"
 };
 
 // функция для автоподсказок
@@ -72,6 +88,7 @@ document.getElementById('route-form').addEventListener('submit', async (e) => {
     document.getElementById('result').innerText = "Введите корректные города из списка.";
     return;
   }
+  document.getElementById('result').innerText = "Загрузка...";
 
   try {
     const res = await fetch(`/find?from=${from}&to=${to}`);
@@ -81,7 +98,7 @@ document.getElementById('route-form').addEventListener('submit', async (e) => {
       document.getElementById('result').innerText = data.error;
     } else {
       document.getElementById('result').innerText =
-        `Расстояние: ${data.distance} км, Время: ${data.time} мин\nМаршрут: ${data.route.join(' -> ')}`;
+        `Расстояние: ${data.distance} км, Время: ${(data.time - data.time % 60) / 60} ч. ${data.time % 60} мин.\nМаршрут: ${data.route.join(' -> ')}`;
     }
   } catch (err) {
     document.getElementById('result').innerText = 'Ошибка запроса к серверу';

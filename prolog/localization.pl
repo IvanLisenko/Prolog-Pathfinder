@@ -1,0 +1,49 @@
+% city_name(City, name)
+% Официальные города
+city_name(simferopol, 'Симферополь').
+city_name(sevastopol, 'Севастополь').
+city_name(kerch, 'Керчь').
+city_name(yevpatoriya, 'Евпатория').
+city_name(feodosiya, 'Феодосия').
+city_name(yalta, 'Ялта').
+city_name(dzhankoi, 'Джанкой').
+city_name(bakhchisaray, 'Бахчисарай').
+city_name(armyansk, 'Армянск').
+city_name(krasnoperekopsk, 'Красноперекопск').
+city_name(alushta, 'Алушта').
+city_name(sudak, 'Судак').
+city_name(shcholkino, 'Щёлкино').
+city_name(belogorsk, 'Белогорск').
+city_name(saki, 'Саки').
+city_name(staryi_krym, 'Старый Крым').
+% Другие города
+city_name(inkerman, 'Инкерман').
+city_name(gurzuf, 'Гурзуф').
+city_name(alupka, 'Алупка').
+city_name(massandra, 'Массандра').
+city_name(koreiz, 'Кореиз').
+city_name(foros, 'Форос').
+city_name(balaklava, 'Балаклава').
+city_name(koktebel, 'Коктебель').
+city_name(ordzhonikidze, 'Орджоникидзе').
+city_name(pribrizhnoye, 'Прибрежное').
+city_name(razdolnoye, 'Раздольное').
+city_name(sovetskiy, 'Советский').
+city_name(krasnogvardeyskoye, 'Красногвардейское').
+city_name(pervomayskoye, 'Первомайское').
+city_name(nizhnegorskiy, 'Нижнегорский').
+city_name(mirnyy, 'Мирный').
+city_name(chernomorskoye, 'Черноморское').
+city_name(krasnoarmeyskoye, 'Красноармейское').
+city_name(voikovo, 'Войково').
+city_name(kirovskoye, 'Кировское').
+city_name(krasnoselskoye, 'Красносельское').
+city_name(medvedevo, 'Медведево').
+city_name(novozyornoye, 'Новоозёрное').
+city_name(oktyabrskoye, 'Октябрьское').
+city_name(partenity, 'Партенит').
+city_name(primorskiy, 'Приморский').
+city_name(solnechnogorskoye, 'Солнечногорское').
+city_name(urozhaynoye, 'Урожайное').
+city_name(kholmovka, 'Холмовка').
+city_name(shchebetovka, 'Щебетовка').
