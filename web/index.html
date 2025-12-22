@@ -6,23 +6,35 @@
   <link rel="stylesheet" href="/web/style.css">
 </head>
 <body>
-  <h1>Поиск маршрута</h1>
+  <div class="app">
+    <h1>🚗 Поиск маршрута</h1>
+    <p class="subtitle">Интеллектуальный поиск пути между городами</p>
 
-  <form id="route-form">
-    <label>Откуда:</label>
-    <input type="text" id="from" autocomplete="off">
+    <form id="route-form" class="card">
+      <div class="field">
+        <label>Откуда</label>
+        <input id="from" placeholder="Начальный город" autocomplete="off">
+        <div id="suggestions-from" class="suggestions"></div>
+      </div>
 
-    <label>Куда:</label>
-    <input type="text" id="to" autocomplete="off">
+      <div class="field">
+        <label>Куда</label>
+        <input id="to" placeholder="Конечный город" autocomplete="off">
+        <div id="suggestions-to" class="suggestions"></div>
+      </div>
 
-    <div id="suggestions-from" class="suggestions"></div>
-    <div id="suggestions-to" class="suggestions"></div>
+      <button type="submit">Найти маршрут</button>
+    </form>
 
-    <button type="submit">Найти маршрут</button>
-  </form>
+    <div id="result" class="result"></div>
 
-  <div id="result" style="margin-top:20px;"></div>
+    <div class="card">
+      <h3>Визуализация маршрута</h3>
+      <svg id="graph" width="100%" height="260"></svg>
+    </div>
+  </div>
 
   <script src="/web/script.js"></script>
 </body>
 </html>
+

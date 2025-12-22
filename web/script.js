@@ -67,9 +67,10 @@ document.getElementById('route-form').addEventListener('submit', async (e) => {
 
   const from = cityMap[fromRus];
   const to = cityMap[toRus];
+  const result = document.getElementById('result');
 
   if (!from || !to) {
-    document.getElementById('result').innerText = "Введите корректные города из списка.";
+    result.innerText = "Введите корректные города из списка.";
     return;
   }
 
@@ -78,13 +79,82 @@ document.getElementById('route-form').addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (data.error) {
-      document.getElementById('result').innerText = data.error;
-    } else {
-      document.getElementById('result').innerText =
-        `Расстояние: ${data.distance} км, Время: ${data.time} мин\nМаршрут: ${data.route.join(' -> ')}`;
+      result.innerText = data.error;
+      return;
     }
+
+    result.innerHTML = `
+      <div class="result-row">
+        <div class="icon">📏</div>
+        <div class="text"><b>Расстояние:</b> ${data.distance} км</div>
+      </div>
+
+      <div class="result-row">
+        <div class="icon">⏱</div>
+        <div class="text"><b>Время:</b> ${data.time} мин</div>
+      </div>
+
+      <div class="route-block">
+        <div class="result-row">
+          <div class="icon">🗺</div>
+          <div class="text"><b>Маршрут</b></div>
+        </div>
+        <div class="route">
+          ${data.route.join(' → ')}
+        </div>
+      </div>
+    `;
+
+    drawRoute(data.route);
+
   } catch (err) {
-    document.getElementById('result').innerText = 'Ошибка запроса к серверу';
+    result.innerText = 'Ошибка запроса к серверу';
     console.error(err);
   }
 });
+
+
+function drawRoute(route) {
+  const svg = document.getElementById("graph");
+  svg.innerHTML = "";
+
+  if (!route || route.length === 0) return;
+
+  const width = svg.clientWidth;
+  const height = svg.clientHeight;
+  const step = width / (route.length + 1);
+  const y = height / 2;
+
+  route.forEach((city, i) => {
+    const x = step * (i + 1);
+
+    if (i > 0) {
+      const prevX = step * i;
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", prevX);
+      line.setAttribute("y1", y);
+      line.setAttribute("x2", x);
+      line.setAttribute("y2", y);
+      line.setAttribute("stroke", "#0078d7");
+      line.setAttribute("stroke-width", "3");
+      svg.appendChild(line);
+    }
+
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", y);
+    circle.setAttribute("r", 10);
+    circle.setAttribute("fill", "#005bb5");
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", x);
+    text.setAttribute("y", y + 30);
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("font-size", "12");
+    text.textContent = city;
+
+    svg.appendChild(circle);
+    svg.appendChild(text);
+  });
+}
+
