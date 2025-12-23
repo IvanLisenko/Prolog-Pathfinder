@@ -122,39 +122,57 @@ function drawRoute(route) {
 
   const width = svg.clientWidth;
   const height = svg.clientHeight;
-  const step = width / (route.length + 1);
-  const y = height / 2;
+
+  const maxPerRow = 2;              // сколько городов в одном ряду
+  const rows = Math.ceil(route.length / maxPerRow);
+
+  const paddingX = 30;
+  const paddingY = 30;
+
+  const rowHeight = (height - paddingY * 2) / rows;
+  const colWidth = (width - paddingX * 2) / maxPerRow;
+
+  let prev = null;
 
   route.forEach((city, i) => {
-    const x = step * (i + 1);
+    const row = Math.floor(i / maxPerRow);
+    const col = i % maxPerRow;
 
-    if (i > 0) {
-      const prevX = step * i;
+    const x = paddingX + col * colWidth + colWidth / 2;
+    const y = paddingY + row * rowHeight + rowHeight / 2;
+
+    // линия
+    if (prev) {
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      line.setAttribute("x1", prevX);
-      line.setAttribute("y1", y);
+      line.setAttribute("x1", prev.x);
+      line.setAttribute("y1", prev.y);
       line.setAttribute("x2", x);
       line.setAttribute("y2", y);
       line.setAttribute("stroke", "#0078d7");
-      line.setAttribute("stroke-width", "3");
+      line.setAttribute("stroke-width", "2");
       svg.appendChild(line);
     }
 
+    // круг
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", x);
     circle.setAttribute("cy", y);
-    circle.setAttribute("r", 10);
+    circle.setAttribute("r", 9);
     circle.setAttribute("fill", "#005bb5");
+    svg.appendChild(circle);
 
+    // подпись
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text.setAttribute("x", x);
-    text.setAttribute("y", y + 30);
+    text.setAttribute("y", y + 26);
     text.setAttribute("text-anchor", "middle");
     text.setAttribute("font-size", "12");
+    text.setAttribute("fill", "#333");
     text.textContent = city;
-
-    svg.appendChild(circle);
     svg.appendChild(text);
+
+    prev = { x, y };
   });
 }
+
 
