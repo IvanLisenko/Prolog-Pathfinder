@@ -16,11 +16,41 @@ city_name(sevastopol, 'Севастополь').
 city_name(yalta, 'Ялта').
 city_name(sudak, 'Судак').
 city_name(feodosiya, 'Феодосия').
-city_name(primorskyi, 'Приморский').
+city_name(primorskiy, 'Приморский').
 city_name(kerch, 'Керчь').
 city_name(armyansk, 'Армянск').
 city_name(krasnogvardeiskoe, 'Красногвардейское').
 city_name(dzhankoi, 'Джанкой').
+
+
+
+city_name(alupka, 'Алупка').
+city_name(foros, 'Форос').
+city_name(koreiz, 'Кореиз').
+city_name(partenity, 'Партенит').
+city_name(gurzuf, 'Гурзуф').
+city_name(bakhchisaray, 'Бахчисарай').
+city_name(inkerman, 'Инкерман').
+city_name(balaklava, 'Балаклава').
+city_name(kirovskoye, 'Кировское').
+city_name(pervomayskoye, 'Первомайское').
+city_name(chernomorskoye, 'Черноморское').
+city_name(mirnyy, 'Мирный').
+city_name(nizhnegorskiy, 'Нижнегорский').
+city_name(razdolnoye, 'Раздольное').
+city_name(yevpatoriya, 'Евпатория').
+city_name(koktebel, 'Коктебель').
+city_name(staryi_krym, 'Старый Крым').
+city_name(shcholkino, 'Щёлкино'). 
+city_name(krasnoselskoye, 'Красносельское').
+city_name(sovietskiy, 'Советский').
+city_name(krasnoarmeyskoye, 'Красноармейское').
+city_name(massandra, 'Массандра').
+city_name(urozhaynoye, 'Урожайное').
+city_name(solnechnogorskoye, 'Солнечногорское').
+city_name(novozyornoye, 'Новозёрное').
+
+
 
 path_names([], []).
 path_names([H|T], [HN|TN]) :-
