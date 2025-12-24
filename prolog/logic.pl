@@ -1,36 +1,99 @@
-% logic.pl - алгоритм Дейкстры для поиска кратчайшего пути
-
+% РђР»РіРѕСЂРёС‚Рј Р”РµР№РєСЃС‚СЂС‹
 find_shortest(Start, Goal, Distance, Time, Path) :-
-    dijkstra_search([(0.0, 0.0, [Start])], Goal, [], Distance, Time, RevPath),
-    reverse(RevPath, Path).
+    dijkstra(Start, Goal, Distance, Time, Path).
 
-% Базовый случай: нашли цель
-dijkstra_search([(Dist, Time, [Goal|Path])|_], Goal, _, Dist, Time, [Goal|Path]) :- !.
+dijkstra(Start, Goal, Distance, Time, Path) :-
+    % РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
+    empty_assoc(Visited),
+    empty_assoc(Distances),
+    empty_assoc(Prevs),
+    put_assoc(Start, Distances, 0.0, Distances1),
+    put_assoc(Start, Prevs, none, Prevs1),
+    
+    % РћСЃРЅРѕРІРЅРѕР№ С†РёРєР»
+    dijkstra_loop([node(0.0, 0.0, Start)], Goal, Visited, Distances1, Prevs1, 
+                  FinalDist, FinalPrev),
+    
+    % РР·РІР»РµС‡РµРЅРёРµ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
+    get_assoc(Goal, FinalDist, Distance),
+    get_time_for_path(Goal, FinalPrev, Time),
+    build_path(Goal, FinalPrev, [], Path).
 
-% Рекурсивный случай: продолжаем поиск
-dijkstra_search([(CurDist, CurTime, [Cur|Path])|Queue], Goal, Visited, BestDist, BestTime, BestPath) :-
-    % Находим всех соседей текущего города
-    findall(
-        (NewDist, NewTime, [Next, Cur|Path]),
-        (
-            (road(Cur, Next, D, T); road(Next, Cur, D, T)),  % Дорога в любую сторону
-            \+ member(Next, [Cur|Path]),                     % Избегаем циклов
-            NewDist is CurDist + D,
-            NewTime is CurTime + T
-        ),
-        NewPaths
-    ),
-    % Добавляем новые пути в очередь
-    append(Queue, NewPaths, UnsortedQueue),
-    % Сортируем по расстоянию (кратчайший первый)
-    sort_paths(UnsortedQueue, SortedQueue),
-    % Продолжаем поиск с отсортированной очередью
-    dijkstra_search(SortedQueue, Goal, [Cur|Visited], BestDist, BestTime, BestPath).
+dijkstra_loop([], _, _, Dist, Prev, Dist, Prev).
+dijkstra_loop([node(CurDist, CurTime, Cur)|Queue], Goal, Visited, Dist, Prev, 
+              FinalDist, FinalPrev) :-
+    (Cur == Goal ->
+        FinalDist = Dist, FinalPrev = Prev
+    ;
+        % РџРѕРјРµС‡Р°РµРј РєР°Рє РїРѕСЃРµС‰С‘РЅРЅСѓСЋ
+        put_assoc(Cur, Visited, true, Visited1),
+        
+        % РќР°С…РѕРґРёРј Рё С„РёР»СЊС‚СЂСѓРµРј СЃРѕСЃРµРґРµР№
+        findall((Next, D, T), (road(Cur, Next, D, T); road(Next, Cur, D, T)), AllNeighbors),
+        process_neighbors(AllNeighbors, CurDist, CurTime, Dist, Prev, [], NewNodes, Dist1, Prev1),
+        
+        % Р”РѕР±Р°РІР»СЏРµРј РІ РїСЂРёРѕСЂРёС‚РµС‚РЅСѓСЋ РѕС‡РµСЂРµРґСЊ
+        merge_into_queue(Queue, NewNodes, NewQueue),
+        
+        % РџСЂРѕРґРѕР»Р¶Р°РµРј
+        dijkstra_loop(NewQueue, Goal, Visited1, Dist1, Prev1, FinalDist, FinalPrev)
+    ).
 
-% Вспомогательный предикат для сортировки путей по расстоянию
-sort_paths(Unsorted, Sorted) :-
-    predsort(compare_paths, Unsorted, Sorted).
+% РћР±СЂР°Р±РѕС‚РєР° СЃРѕСЃРµРґРµР№
+process_neighbors([], _, _, Dist, Prev, Nodes, Nodes, Dist, Prev).
+process_neighbors([(Next, D, T)|Rest], CurDist, CurTime, Dist, Prev, AccNodes, 
+                  NewNodes, FinalDist, FinalPrev) :-
+    NewDist is CurDist + D,
+    NewTime is CurTime + T,
+    (get_assoc(Next, Dist, OldDist) ->
+        (NewDist < OldDist ->
+            % РћР±РЅРѕРІР»СЏРµРј РµСЃР»Рё РЅР°С€Р»Рё РєРѕСЂРѕС‡Рµ
+            put_assoc(Next, Dist, NewDist, Dist1),
+            put_assoc(Next, Prev, Cur, Prev1),
+            process_neighbors(Rest, CurDist, CurTime, Dist1, Prev1, 
+                             [node(NewDist, NewTime, Next)|AccNodes], 
+                             NewNodes, FinalDist, FinalPrev)
+        ;
+            % РџСЂРѕРїСѓСЃРєР°РµРј РµСЃР»Рё РЅРµ РєРѕСЂРѕС‡Рµ
+            process_neighbors(Rest, CurDist, CurTime, Dist, Prev, 
+                             AccNodes, NewNodes, FinalDist, FinalPrev)
+        )
+    ;
+        % РќРѕРІР°СЏ РІРµСЂС€РёРЅР°
+        put_assoc(Next, Dist, NewDist, Dist1),
+        put_assoc(Next, Prev, Cur, Prev1),
+        process_neighbors(Rest, CurDist, CurTime, Dist1, Prev1,
+                         [node(NewDist, NewTime, Next)|AccNodes],
+                         NewNodes, FinalDist, FinalPrev)
+    ).
 
-% Компаратор: сравниваем только по расстоянию (первый элемент кортежа)
-compare_paths(Order, (D1, _, _), (D2, _, _)) :-
-    compare(Order, D1, D2).
+% РЎР»РёСЏРЅРёРµ РѕС‡РµСЂРµРґРµР№ (РїРѕ СЂР°СЃСЃС‚РѕСЏРЅРёСЋ)
+merge_into_queue([], New, New).
+merge_into_queue(Old, [], Old).
+merge_into_queue([node(D1, T1, C1)|Old], [node(D2, T2, C2)|New], 
+                 [node(D1, T1, C1)|Merged]) :-
+    D1 =< D2,
+    merge_into_queue(Old, [node(D2, T2, C2)|New], Merged).
+merge_into_queue([node(D1, T1, C1)|Old], [node(D2, T2, C2)|New],
+                 [node(D2, T2, C2)|Merged]) :-
+    D1 > D2,
+    merge_into_queue([node(D1, T1, C1)|Old], New, Merged).
+
+% РџРѕСЃС‚СЂРѕРµРЅРёРµ РїСѓС‚Рё
+build_path(City, Prevs, Acc, Path) :-
+    (get_assoc(City, Prevs, Prev), Prev \= none ->
+        build_path(Prev, Prevs, [City|Acc], Path)
+    ;
+        Path = [City|Acc]
+    ).
+
+% Р’С‹С‡РёСЃР»РµРЅРёРµ РІСЂРµРјРµРЅРё
+get_time_for_path(Goal, Prevs, TotalTime) :-
+    build_path(Goal, Prevs, [], Path),
+    calculate_time(Path, 0.0, TotalTime).
+
+calculate_time([_], Time, Time).
+calculate_time([City1, City2|Rest], Acc, Total) :-
+    (road(City1, City2, _, T); road(City2, City1, _, T)),
+    NewAcc is Acc + T,
+    calculate_time([City2|Rest], NewAcc, Total).
